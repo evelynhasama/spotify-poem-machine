@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Poem Machine</title>
+</head>
+<h1>Welcome to the Spotify Poem Machine</h1>
+<body>
+    {% if logged_in %}
+    <form method="post">
+        <p>How long do you want your confession to be:</p>
+        <input type="radio" id="time1" name="term" value="short_term">
+        <label for="time1">Short Term</label><br>
+        <input type="radio" id="time2" name="term" value="medium_term">
+        <label for="time2">Medium Term</label><br>
+        <input type="radio" id="time3" name="term" value="long_term">
+        <label for="time3">Long Term</label>
+
+        <p>Please select the amount that you want to list:</p>
+        <input type="radio" id="amount1" name="amount" value="10">
+        <label for="amount1">10</label>
+        <input type="radio" id="amount2" name="amount" value="25">
+        <label for="amount2">25</label>
+        <input type="radio" id="amount3" name="amount" value="50">
+        <label for="amount3">50</label>
+
+        <br>
+        <br>
+
+        <input type="submit" value="Create Poem" name="get_top_tracks" />
+    </form>
+    {% else %}
+        <p>You are not logged in. <a href="/login">Login with Spotify</a></p>
+    {% endif %}
+</body>
+</html>
