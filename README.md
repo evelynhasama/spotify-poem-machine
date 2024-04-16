@@ -6,4 +6,6 @@
 3. install required packages (flask, spotipy, ...)
 4. in terminal, run `python core-machine.py -h localhost -p 3000`
 
-if issues with auth, clear cookies/cache in browser and folders
+if issues with auth
+- clear cookies/cache in browser and locally
+- make sure user's email is registered in [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
