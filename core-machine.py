@@ -97,19 +97,17 @@ def top_tracks():
     
     poem = []
     for track in top_tracks['items']:
-        line = ""
-        track_words = track['name'].lower().split()
-        
-        # create a random True/False array of length track_words with at least one true
-        random_bools = [False] * len(track_words)
-        random_bools[random.randint(0, len(track_words) - 1)] = True
-        
-        for i, word in enumerate(track_words):
-            if random_bools[i] or random.choice([True, False]):
-                line += word + " "
+        line = remove_feats(track['name'].lower())
         poem.append(line)
-        
+    random.shuffle(poem)
+    
     return render_template('poem_v2.html', poem=poem, poem_title=poem_title, user = user["display_name"])
+
+def remove_feats(track_name):
+    if "(f" in track_name:
+        return track_name.split(" (f")[0]
+    else:
+        return track_name
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=3000)
