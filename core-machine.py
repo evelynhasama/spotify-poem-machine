@@ -99,7 +99,9 @@ def top_tracks():
     for track in top_tracks['items']:
         line = remove_feats(track['name'].lower())
         poem.append(line)
-    random.shuffle(poem)
+    
+    # random.seed(47)
+    # random.shuffle(poem)
     
     return render_template('poem_v2.html', poem=poem, poem_title=poem_title, user = user["display_name"])
 

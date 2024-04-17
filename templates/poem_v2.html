@@ -1,90 +1,114 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ poem_title }}</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f8f8f8;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ poem_title }}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f8f8f8;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1,
+    h3 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .track {
+      list-style-type: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+    .word {
+      display: inline-block;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    .selected {
+      font-weight: bold;
+    }
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #333;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .create-button {
+      display: block;
+      margin-top: 20px;
+      margin-right: auto;
+      margin-left: auto;
+      padding: 10px 20px;
+      padding: 10px 20px;
+      background-color: #1db954;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .create-button:hover {
+      background-color: #1ed760;
+    }
+    .text-field {
+      flex:1;
+    }
+    .track-item {
+        display: flex; /* Use flexbox */
+        align-items: center; /* Align items vertically */
       }
-      .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      h1,
-      h3 {
-        text-align: center;
-        margin-bottom: 20px;
-      }
-      .track {
-        list-style-type: none;
-        padding: 0;
-        margin-bottom: 20px;
-      }
-      .word {
-        display: inline-block;
-        margin-right: 10px;
-        cursor: pointer;
-      }
-      .selected {
+      .track-name {
         font-weight: bold;
+        margin-right: 10px;
       }
-      a {
-        display: block;
-        text-align: center;
-        margin-top: 20px;
-        text-decoration: none;
-        color: #333;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
-      .create-button {
-        display: block;
-        margin-top: 20px;
-        margin-right: auto;
-        margin-left: auto;
-        padding: 10px 20px;
-        padding: 10px 20px;
-        background-color: #1db954;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      .create-button:hover {
-        background-color: #1ed760;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>{{ poem_title }}</h1>
-      <h3>By {{ user }}</h3>
-      {% for line in poem %}
-      <ul class="track" id="track{{ track_index }}">
-        {{line}}
-      </ul>
-      {% endfor %}
-      <button class="create-button" onclick="createNewPoem()">
-        Create new poem
-      </button>
-      <a href="/logout">Logout</a>
-    </div>
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>{{ poem_title }}</h1>
+  <h3>By {{ user }}</h3>
+  {% for line in poem %}
+  <ul class="track" id="track{{ loop.index }}">
+    <li class="track-item">
+        <div class="track-name">{{ line }}</div>
+        <input type="text" class="text-field" onkeydown="handleKeyDown(event, {{ loop.index }})" />
+      </li>
+  </ul>
+  {% endfor %}
+  <button class="create-button" onclick="createNewPoem()">
+    Create new poem
+  </button>
+  <a href="/logout">Logout</a>
+</div>
 
-    <script>
+<script>
+  function handleKeyDown(event, trackIndex) {
+    if (event.key === "Enter") {
+      const input = event.target;
+      const inputValue = input.value.trim();
+      const listItem = input.parentElement;
+      const textNode = document.createTextNode(inputValue);
+      listItem.removeChild(input);
+      listItem.appendChild(textNode);
+    }
+  }
 
-      function createNewPoem() {
-        window.location.href = "/";
-      }
-    </script>
-  </body>
+  function createNewPoem() {
+    window.location.href = "/";
+  }
+</script>
+</body>
 </html>
