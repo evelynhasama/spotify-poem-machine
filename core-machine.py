@@ -2,6 +2,7 @@ from flask import Flask, redirect, request, session, render_template, make_respo
 import spotipy
 import keys
 from spotipy.oauth2 import SpotifyOAuth
+import os
 
 app = Flask(__name__)
 app.secret_key = keys.secret_key
@@ -13,12 +14,6 @@ REDIRECT_URI = 'http://localhost:3000/callback'
 
 # Scope for user's top tracks
 SCOPE = 'user-top-read'
-
-@app.route('/clear-cache')
-def clear_cache():
-    response = make_response('Cache cleared')
-    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    return response
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -42,6 +37,27 @@ def login():
 
     auth_url = sp_oauth.get_authorize_url()
     return redirect(auth_url)
+
+@app.route('/logout')
+def logout():
+    # Remove the .cache file
+    if os.path.exists('.cache'):
+        os.remove('.cache')
+
+    # Clear the session
+    for key in list(session.keys()):
+        session.pop(key)
+
+    # Create a response to clear cookies
+    response = make_response(redirect('/'))
+    response.set_cookie('cookie_name', '', expires=0)
+
+    # Set Cache-Control header to clear cache
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+
+    return response
 
 @app.route('/callback')
 def callback():
@@ -67,6 +83,7 @@ def top_tracks():
     limit = int(request.args.get('amount'))
 
     top_tracks = sp.current_user_top_tracks(time_range=time_range, limit=limit)
+    user = sp.current_user()
     
     poem_title = "Confessions from the"
     if time_range == 'short_term':
@@ -76,14 +93,13 @@ def top_tracks():
     elif time_range == 'long_term':
         poem_title += " Last 1 Year"
     
-
     tracks_data = []
     for track in top_tracks['items']:
         tracks_data.append({
             'name': track['name'].lower()
         })
 
-    return render_template('poem.html', tracks_data=tracks_data, poem_title=poem_title)
+    return render_template('poem.html', tracks_data=tracks_data, poem_title=poem_title, user = user["display_name"])
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=3000)
