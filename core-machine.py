@@ -5,6 +5,7 @@ from spotipy.oauth2 import SpotifyOAuth
 import os
 
 app = Flask(__name__)
+app.debug = True
 app.secret_key = keys.secret_key
 
 # Define your Spotify API credentials

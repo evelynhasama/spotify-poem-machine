@@ -70,18 +70,17 @@
       <h1>{{ poem_title }}</h1>
       <h3>By {{ user }}</h3>
       {% for track_index, track in indexed_tracks_data %}
-    <ul class="track" id="track{{ track_index }}" {% if track_index == 0 %}style="display: block;"{% endif %}>
+        <ul class="track" id="track{{ track_index }}" {% if track_index == 0 %}style="display: block;"{% endif %}>
         {% for word in track %}
             <li class="word" onclick="selectWord(this, {{ track_index }})">
-                {{ word }}
+              {{ word }}
             </li>
         {% endfor %}
-    </ul>
-    
-{% endfor %}
-  <button class="create-button" onclick="createNewPoem()">Create new poem</button>
-    <a href="/logout">Logout</a>
-</div>
+      </ul>
+      {% endfor %}
+      <button class="create-button" onclick="createNewPoem()">New Poem</button>
+      <a href="/logout">Logout</a>
+    </div>
 
     <script>
       function selectWord(clickedWord, trackIndex) {
@@ -99,6 +98,11 @@
           }
         });
       }
+      function createNewPoem() {
+        window.location.href = "/";
+      }
+
     </script>
+
   </body>
 </html>
