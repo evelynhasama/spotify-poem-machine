@@ -28,7 +28,6 @@
         list-style-type: none;
         padding: 0;
         margin-bottom: 20px;
-        display: none; /* Hide all tracks initially */
       }
       .word {
         display: inline-block;
@@ -44,25 +43,26 @@
         margin-top: 20px;
         text-decoration: none;
         color: #333;
-    }
-        a:hover {
-            text-decoration: underline;
-        }
-        .create-button {
-          display: block;
-          margin-top: 20px;
-          margin-left: auto; 
-          margin-right: auto;
-          background-color: #1db954;
-          color: #fff;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .create-button {
+        display: block;
+        margin-top: 20px;
+        margin-right: auto;
+        margin-left: auto;
+        padding: 10px 20px;
+        padding: 10px 20px;
+        background-color: #1db954;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
       }
       .create-button:hover {
-          background-color: #1ed760;
+        background-color: #1ed760;
       }
-
     </style>
   </head>
   <body>
@@ -70,32 +70,26 @@
       <h1>{{ poem_title }}</h1>
       <h3>By {{ user }}</h3>
       {% for track_index, track in indexed_tracks_data %}
-    <ul class="track" id="track{{ track_index }}" {% if track_index == 0 %}style="display: block;"{% endif %}>
+      <ul class="track" id="track{{ track_index }}">
         {% for word in track %}
-            <li class="word" onclick="selectWord(this, {{ track_index }})">
-                {{ word }}
-            </li>
+        <li class="word" onclick="selectWord(this)">{{ word }}</li>
         {% endfor %}
-    </ul>
-    
-{% endfor %}
-  <button class="create-button" onclick="createNewPoem()">Create new poem</button>
-    <a href="/logout">Logout</a>
-</div>
+      </ul>
+      {% endfor %}
+      <button class="create-button" onclick="createNewPoem()">
+        Create new poem
+      </button>
+      <a href="/logout">Logout</a>
+    </div>
 
     <script>
-      function selectWord(clickedWord, trackIndex) {
+      function selectWord(clickedWord) {
         var words = clickedWord.parentNode.querySelectorAll(".word");
         words.forEach(function (word) {
-          word.classList.remove("selected");
           if (word !== clickedWord) {
             word.style.display = "none";
           } else {
             word.classList.add("selected");
-            var nextTrack = document.getElementById("track" + (trackIndex + 1));
-            if (nextTrack) {
-              nextTrack.style.display = "block";
-            }
           }
         });
       }

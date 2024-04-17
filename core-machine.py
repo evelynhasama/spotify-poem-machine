@@ -85,21 +85,22 @@ def top_tracks():
     top_tracks = sp.current_user_top_tracks(time_range=time_range, limit=limit)
     user = sp.current_user()
     
-    poem_title = "Confessions from the"
+    poem_title = "Spotify Secrets from the"
     if time_range == 'short_term':
         poem_title += " Last 4 Weeks"
     elif time_range == 'medium_term':
         poem_title += " Last 6 Months"
     elif time_range == 'long_term':
-        poem_title += " Last 1 Year"
+        poem_title += " Last Year"
     
     tracks_data = []
     for track in top_tracks['items']:
-        tracks_data.append({
-            'name': track['name'].lower()
-        })
-
-    return render_template('poem.html', tracks_data=tracks_data, poem_title=poem_title, user = user["display_name"])
+        tracks_data.append(track['name'].lower().split())
+        
+    # Pre-process the data to include indices
+    indexed_tracks_data = [(index, track) for index, track in enumerate(tracks_data)]
+    
+    return render_template('poem_v2.html', indexed_tracks_data=indexed_tracks_data, poem_title=poem_title, user = user["display_name"])
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=3000)
