@@ -3,6 +3,7 @@ import spotipy
 import keys
 from spotipy.oauth2 import SpotifyOAuth
 import os
+import random
 
 app = Flask(__name__)
 app.debug = True
@@ -94,14 +95,21 @@ def top_tracks():
     elif time_range == 'long_term':
         poem_title += " Last Year"
     
-    tracks_data = []
+    poem = []
     for track in top_tracks['items']:
-        tracks_data.append(track['name'].lower().split())
+        line = ""
+        track_words = track['name'].lower().split()
         
-    # Pre-process the data to include indices
-    indexed_tracks_data = [(index, track) for index, track in enumerate(tracks_data)]
-    
-    return render_template('poem_v2.html', indexed_tracks_data=indexed_tracks_data, poem_title=poem_title, user = user["display_name"])
+        # create a random True/False array of length track_words with at least one true
+        random_bools = [False] * len(track_words)
+        random_bools[random.randint(0, len(track_words) - 1)] = True
+        
+        for i, word in enumerate(track_words):
+            if random_bools[i] or random.choice([True, False]):
+                line += word + " "
+        poem.append(line)
+        
+    return render_template('poem_v2.html', poem=poem, poem_title=poem_title, user = user["display_name"])
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=3000)

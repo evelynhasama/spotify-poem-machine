@@ -69,11 +69,9 @@
     <div class="container">
       <h1>{{ poem_title }}</h1>
       <h3>By {{ user }}</h3>
-      {% for track_index, track in indexed_tracks_data %}
+      {% for line in poem %}
       <ul class="track" id="track{{ track_index }}">
-        {% for word in track %}
-        <li class="word" onclick="selectWord(this)">{{ word }}</li>
-        {% endfor %}
+        {{line}}
       </ul>
       {% endfor %}
       <button class="create-button" onclick="createNewPoem()">
@@ -83,16 +81,7 @@
     </div>
 
     <script>
-      function selectWord(clickedWord) {
-        var words = clickedWord.parentNode.querySelectorAll(".word");
-        words.forEach(function (word) {
-          if (word !== clickedWord) {
-            word.style.display = "none";
-          } else {
-            word.classList.add("selected");
-          }
-        });
-      }
+
       function createNewPoem() {
         window.location.href = "/";
       }
