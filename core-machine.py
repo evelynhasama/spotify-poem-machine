@@ -3,6 +3,8 @@ import spotipy
 import keys
 from spotipy.oauth2 import SpotifyOAuth
 import os
+import nltk
+from nlp import create_poem
 
 app = Flask(__name__)
 app.debug = True
@@ -96,12 +98,11 @@ def top_tracks():
     
     tracks_data = []
     for track in top_tracks['items']:
-        tracks_data.append(track['name'].lower().split())
+        tracks_data.append(track['name'].lower())
         
-    # Pre-process the data to include indices
-    indexed_tracks_data = [(index, track) for index, track in enumerate(tracks_data)]
+    poem = create_poem(tracks_data)
     
-    return render_template('poem_v2.html', indexed_tracks_data=indexed_tracks_data, poem_title=poem_title, user = user["display_name"])
+    return render_template('poem_v2.html', poem=poem, poem_title=poem_title, user = user["display_name"])
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=3000)
